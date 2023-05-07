@@ -1,11 +1,18 @@
+import graphql.Assert;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.time.Duration;
 
 public class FirstTest {
     private AppiumDriver driver;
@@ -30,9 +37,49 @@ driver = new AndroidDriver(url, capabilities);
     public void tearDown(){
         driver.quit();
     }
+
     @Test
-    public void firstTest(){
-        System.out.println("First test run");
+    public void inputFieldContainsText()
+    {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Not find Skip button",
+                5
+        );
+        assertElementHasText(
+                By.xpath("//androidx.cardview.widget.CardView/android.widget.TextView"),
+                "Search Wikipedia",
+                "Search bar text is invalid",
+                5
+        );
     }
+    private WebElement assertElementHasText(By by,String expected_text, String error_message, long timeOut){
+        WebElement element = waitForElementPresent(by, error_message, timeOut);
+        String actual_text = element.getText();
+        Assertions.assertEquals(expected_text,actual_text,error_message);
+        return element;
+    }
+
+    private WebElement waitForElementPresent(By by, String error_message, long timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        wait.withMessage(error_message + "\n");
+        return wait.until(
+                ExpectedConditions.presenceOfElementLocated(by)
+        );
+
+
+}
+    private WebElement waitForElementAndClick (By by, String error_message, long timeOut){
+        WebElement element = waitForElementPresent(by, error_message, timeOut);
+        element.click();
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        return element;
+    }
+
+
 
 }
