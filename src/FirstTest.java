@@ -13,34 +13,35 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
 import java.time.Duration;
+import java.util.List;
 
 public class FirstTest {
     private AppiumDriver driver;
 
 
     @BeforeEach
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
-        capabilities.setCapability("platformName","Android");
-        capabilities.setCapability("platformVersion","11.0");
-        capabilities.setCapability("deviceName","AndroidTestDevice");
-        capabilities.setCapability("appPackage","org.wikipedia");
-        capabilities.setCapability("appActivity",".main.MainActivity");
-        capabilities.setCapability("app","/Users/oleg.sofronov/Documents/JavaAppiumAutomation/javaAppiumAutomation/apks/Wikipedia_2.7.50437-r-2023-04-12_Apkpure.apk");
-        capabilities.setCapability("automationName","UiAutomator2");
+        capabilities.setCapability("platformName", "Android");
+        capabilities.setCapability("platformVersion", "11.0");
+        capabilities.setCapability("deviceName", "AndroidTestDevice");
+        capabilities.setCapability("appPackage", "org.wikipedia");
+        capabilities.setCapability("appActivity", ".main.MainActivity");
+        capabilities.setCapability("app", "/Users/oleg.sofronov/Documents/JavaAppiumAutomation/javaAppiumAutomation/apks/Wikipedia_2.7.50437-r-2023-04-12_Apkpure.apk");
+        capabilities.setCapability("automationName", "UiAutomator2");
         URL url = new URL("http://localhost:4723/");
 
-driver = new AndroidDriver(url, capabilities);
+        driver = new AndroidDriver(url, capabilities);
     }
+
     @AfterEach
-    public void tearDown(){
+    public void tearDown() {
         driver.quit();
     }
 
     @Test
-    public void inputFieldContainsText()
-    {
+    public void inputFieldContainsText() {
         waitForElementAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Not find Skip button",
@@ -53,10 +54,46 @@ driver = new AndroidDriver(url, capabilities);
                 5
         );
     }
-    private WebElement assertElementHasText(By by,String expected_text, String error_message, long timeOut){
+
+    @Test
+    public void cancelSearch() {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Not find Skip button",
+                5
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Not find SearchBar",
+                5
+        );
+        waitForElementPresent(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Not find SearchBar",
+                5
+        ).sendKeys("Tears");
+        List<WebElement> articles_elements = waitForElementsPresent(By.id("org.wikipedia:id/page_list_item_title"),
+                "Not find any articles",
+                5);
+        Assertions.assertEquals(6, articles_elements.size());
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Not find Close button",
+                5
+        );
+        waitForElementPresent(
+                By.id("org.wikipedia:id/search_empty_container"),
+                "Search is not empty",
+                5
+        );
+
+
+    }
+
+    private WebElement assertElementHasText(By by, String expected_text, String error_message, long timeOut) {
         WebElement element = waitForElementPresent(by, error_message, timeOut);
         String actual_text = element.getText();
-        Assertions.assertEquals(expected_text,actual_text,error_message);
+        Assertions.assertEquals(expected_text, actual_text, error_message);
         return element;
     }
 
@@ -67,9 +104,15 @@ driver = new AndroidDriver(url, capabilities);
                 ExpectedConditions.presenceOfElementLocated(by)
         );
 
+    }
 
-}
-    private WebElement waitForElementAndClick (By by, String error_message, long timeOut){
+    private List<WebElement> waitForElementsPresent(By by, String error_message, long timeOut) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        wait.withMessage(error_message + "\n");
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
+    }
+
+    private WebElement waitForElementAndClick(By by, String error_message, long timeOut) {
         WebElement element = waitForElementPresent(by, error_message, timeOut);
         element.click();
 //        try {
@@ -79,7 +122,6 @@ driver = new AndroidDriver(url, capabilities);
 //        }
         return element;
     }
-
 
 
 }
