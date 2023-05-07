@@ -86,8 +86,32 @@ public class FirstTest {
                 "Search is not empty",
                 5
         );
-
-
+    }
+    @Test
+    public void assertTitlesFromSearch(){
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Not find Skip button",
+                5
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Not find SearchBar",
+                5
+        );
+        String search_word = "Tears";
+        waitForElementPresent(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Not find SearchBar",
+                5
+        ).sendKeys(search_word);
+        List<WebElement> articles_elements = waitForElementsPresent(By.id("org.wikipedia:id/page_list_item_title"),
+                "Not find any articles",
+                5);
+        for (WebElement articles_element : articles_elements){
+            String article_title = articles_element.getText();
+            Assertions.assertTrue(article_title.contains(search_word),"Not all articles contains search-word " + article_title +" in title");
+        }
     }
 
     private WebElement assertElementHasText(By by, String expected_text, String error_message, long timeOut) {
