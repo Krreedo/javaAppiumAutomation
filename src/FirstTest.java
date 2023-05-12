@@ -1,5 +1,4 @@
 import com.google.common.collect.ImmutableMap;
-import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -15,7 +14,7 @@ import java.time.Duration;
 import java.util.List;
 
 public class FirstTest {
-    private AppiumDriver driver;
+    private AndroidDriver driver;
 
 
     @BeforeEach
@@ -29,6 +28,7 @@ public class FirstTest {
         capabilities.setCapability("appActivity", ".main.MainActivity");
         capabilities.setCapability("app", "/Users/oleg.sofronov/Documents/JavaAppiumAutomation/javaAppiumAutomation/apks/Wikipedia_2.7.50437-r-2023-04-12_Apkpure.apk");
         capabilities.setCapability("automationName", "UiAutomator2");
+        capabilities.setCapability("deviceOrientation", "Portrait");
         URL url = new URL("http://localhost:9090/");
 
         driver = new AndroidDriver(url, capabilities);
@@ -252,6 +252,36 @@ public class FirstTest {
 
 
     }
+    @Test
+    public void findingArticleTitle(){
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Not find Skip button",
+                5
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Not find SearchBar",
+                5
+        );
+        String search_word = "Thor";
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Not find SearchBar",
+                search_word,
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Thor: Love and Thunder']"),
+                "Not find Love Ant Thunder article",
+                5
+        );
+        assertElementPresent(
+                By.xpath("//android.view.View/android.view.View[1]/android.view.View[1][@text='Thor: Love and Thunder']"),
+                "Not Find Article title"
+        );
+
+    }
 
 //        try {
 //            Thread.sleep(5000);
@@ -309,8 +339,19 @@ public class FirstTest {
                 "speed", 3000
         ));
     }
+    private WebElement assertElementPresent(By by, String error_message) {
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        try {
+            WebElement element = driver.findElement(by);
+            return element;
+        } catch (NoSuchElementException e) {
+            throw new AssertionError(error_message);
+        }
 
-    ;
 
-
+    }
 }
