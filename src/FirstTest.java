@@ -1,12 +1,11 @@
-import graphql.Assert;
+import com.google.common.collect.ImmutableMap;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -30,7 +29,7 @@ public class FirstTest {
         capabilities.setCapability("appActivity", ".main.MainActivity");
         capabilities.setCapability("app", "/Users/oleg.sofronov/Documents/JavaAppiumAutomation/javaAppiumAutomation/apks/Wikipedia_2.7.50437-r-2023-04-12_Apkpure.apk");
         capabilities.setCapability("automationName", "UiAutomator2");
-        URL url = new URL("http://localhost:4723/");
+        URL url = new URL("http://localhost:9090/");
 
         driver = new AndroidDriver(url, capabilities);
     }
@@ -87,8 +86,9 @@ public class FirstTest {
                 5
         );
     }
+
     @Test
-    public void assertTitlesFromSearch(){
+    public void assertTitlesFromSearch() {
         waitForElementAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Not find Skip button",
@@ -100,19 +100,165 @@ public class FirstTest {
                 5
         );
         String search_word = "Tears";
-        waitForElementPresent(
+        waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 "Not find SearchBar",
+                search_word,
                 5
-        ).sendKeys(search_word);
+        );
         List<WebElement> articles_elements = waitForElementsPresent(By.id("org.wikipedia:id/page_list_item_title"),
                 "Not find any articles",
                 5);
-        for (WebElement articles_element : articles_elements){
+        for (WebElement articles_element : articles_elements) {
             String article_title = articles_element.getText();
-            Assertions.assertTrue(article_title.contains(search_word),"Not all articles contains search-word " + article_title +" in title");
+            Assertions.assertTrue(article_title.contains(search_word), "Not all articles contains search-word " + article_title + " in title");
         }
     }
+
+    @Test
+    public void twoArticlesSave() {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Not find Skip button",
+                5
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Not find SearchBar",
+                5
+        );
+        String search_word = "Thor";
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Not find SearchBar",
+                search_word,
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Thor: Love and Thunder']"),
+                "Not find Love Ant Thunder article",
+                5
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/page_save"),
+                "Not find Save Button",
+                5
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/snackbar_action"),
+                "Not find Add to List Button",
+                5
+        );
+        String list_name = "MCU Films";
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/text_input"),
+                "Not find text field",
+                list_name,
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='android:id/button1'][@text='OK']"),
+                "Not find OK Button",
+                15
+        );
+        driver.navigate().back();
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Thor: Ragnarok']"),
+                "Not find Ragnarok article",
+                5
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/page_save"),
+                "Not find Save Button",
+                5
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/snackbar_action"),
+                "Not find Add to List Button",
+                5
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/item_title_container"),
+                "Not find Add to List Button",
+                5
+        );
+        waitForElementsPresent(
+                By.id("org.wikipedia:id/fragment_page_coordinator"),
+                "Snackbar not presented after article save",
+                5
+        );
+        driver.navigate().back();
+        driver.navigate().back();
+        driver.navigate().back();
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/nav_tab_reading_lists"),
+                "Not find Saved Button in tab-bar",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/item_title'][@text='" + list_name + "']"),
+                "Not find MCU List",
+                5
+        );
+        swipe(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Thor: Love and Thunder']"),
+                "Not find article 'Thor: Love and Thunder'",
+                5,
+                "left",
+                0.75
+        );
+
+//        driver.executeScript(
+//                "mobile: longClick",
+//                "{element: "+ waitForElementPresent(
+//                        By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text=Thor: Love and Thunder]"),
+//                        "Not find Love and Thunder article",
+//                        5
+//                ) + "}"
+//        );
+//        waitForElementAndClick(
+//                By.id("org.wikipedia:id/reading_list_item_select"),
+//                "Not find Select Button in bottom-sheet",
+//                5
+//        );
+//        waitForElementAndClick(
+//                By.id("org.wikipedia:id/menu_delete_selected"),
+//                "Not find Delete button",
+//                5
+//        );
+        List<WebElement> saved_articles_elements = waitForElementsPresent(By.id("org.wikipedia:id/page_list_item_title"),
+                "Not find any articles",
+                5);
+        for (WebElement saved_articles_element : saved_articles_elements) {
+            String article_title = saved_articles_element.getText();
+            Assertions.assertTrue(article_title.contains("Thor: Ragnarok"), "There is more then one article with " + article_title + " in title");
+        }
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Thor: Ragnarok']"),
+                "Not find article Thor: Ragnarok",
+                5
+        );
+        String article_title = waitForElementPresent(
+                By.xpath("//android.view.View/android.view.View[1]/android.view.View[1]"),
+                "Not find title of article",
+                5
+        ).getText();
+        Assertions.assertEquals(
+                "Thor: Ragnarok",
+                article_title,
+                "Wrong article title"
+        );
+
+
+    }
+
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
 
     private WebElement assertElementHasText(By by, String expected_text, String error_message, long timeOut) {
         WebElement element = waitForElementPresent(by, error_message, timeOut);
@@ -139,13 +285,32 @@ public class FirstTest {
     private WebElement waitForElementAndClick(By by, String error_message, long timeOut) {
         WebElement element = waitForElementPresent(by, error_message, timeOut);
         element.click();
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         return element;
     }
+
+    private WebElement waitForElementAndSendKeys(By by, String error_message, String value, long timeOut) {
+        WebElement element = waitForElementPresent(by, error_message, timeOut);
+        element.sendKeys(value);
+        return element;
+    }
+
+    public void swipe(By by, String error_message, long timeOut, String direction, double percent) {
+        WebElement element = waitForElementPresent(by, error_message, timeOut);
+        Point location = element.getLocation();
+        Dimension size = element.getSize();
+        int left = location.getX();
+        int top = location.getY();
+        int height = size.getHeight();
+        int width = size.getWidth();
+        ((JavascriptExecutor) driver).executeScript("mobile: swipeGesture", ImmutableMap.of(
+                "left", left, "top", top, "width", width, "height", height,
+                "direction", direction,
+                "percent", percent,
+                "speed", 3000
+        ));
+    }
+
+    ;
 
 
 }
