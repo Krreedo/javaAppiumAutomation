@@ -9,8 +9,9 @@ public class OnBoardingPageObject extends MainPageObject{
         super(driver);
     }
     private static final String
-            ONBOARDING_SKIP_BUTTON_ID = "org.wikipedia:id/fragment_onboarding_skip_button";
+            ONBOARDING_SKIP_BUTTON_ID = "org.wikipedia:id/fragment_onboarding_skip_button",
+            ONBOARDING_SKIP_BUTTON_XPATH = "//*[@resource-id='org.wikipedia:id/fragment_onboarding_skip_button'][@text='SKIP']";
 public void skipOnboarding(){
-        waitForElementAndClick(By.id(ONBOARDING_SKIP_BUTTON_ID),"Not find Skip button",150000000);
+        waitForElementAndClick(By.xpath(ONBOARDING_SKIP_BUTTON_XPATH),"Not find Skip button",60);
 }
 }

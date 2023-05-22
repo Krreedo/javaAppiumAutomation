@@ -55,7 +55,7 @@ public class SavedArticlesPageObject extends MainPageObject{
     }
     public void openArticle(String article_title){
         waitForElementAndClick(
-                By.id(getArticleNameXpath(article_title)),
+                By.xpath(getArticleNameXpath(article_title)),
                 "Not find " + article_title + " article",
                 5
                 );

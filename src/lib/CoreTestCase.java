@@ -25,7 +25,7 @@ public class CoreTestCase {
         capabilities.setCapability("app", "/Users/oleg.sofronov/Documents/JavaAppiumAutomation/javaAppiumAutomation/apks/Wikipedia_2.7.50437-r-2023-04-12_Apkpure.apk");
         capabilities.setCapability("automationName", "UiAutomator2");
         capabilities.setCapability("deviceOrientation", "Portrait");
-        URL url = new URL("http://localhost:9090/");
+        URL url = new URL("http://localhost:4723/");
 
         driver = new AndroidDriver(url, capabilities);
     MainPageObject = new MainPageObject(driver);
