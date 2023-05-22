@@ -6,19 +6,19 @@ import org.openqa.selenium.By;
 
 public class ArticlePageObject extends MainPageObject {
     private final static String
-        SAVE_BUTTON_ID = "org.wikipedia:id/page_save",
-        ADD_TO_LIST_BUTTON_ID = "org.wikipedia:id/snackbar_action",
-        ADD_TO_LIST_INPUT_FIELD_ID = "org.wikipedia:id/text_input",
-        LIST_TITLE_XPATH = "//*[@resource-id='org.wikipedia:id/item_title'][@text='{SUBSTRING}']",
-        SNACKBAR_AFTER_SAVE_ID = "org.wikipedia:id/fragment_page_coordinator",
-        ARTICLE_TITLE_XPATH = "//android.view.View/android.view.View[1]/android.view.View[1]",
-        ADD_TO_LIST_OK_BUTTON_XPATH = "//*[@resource-id='android:id/button1'][@text='OK']";
+            SAVE_BUTTON_ID = "org.wikipedia:id/page_save",
+            ADD_TO_LIST_BUTTON_ID = "org.wikipedia:id/snackbar_action",
+            ADD_TO_LIST_INPUT_FIELD_ID = "org.wikipedia:id/text_input",
+            LIST_TITLE_XPATH = "//*[@resource-id='org.wikipedia:id/item_title'][@text='{SUBSTRING}']",
+            SNACKBAR_AFTER_SAVE_ID = "org.wikipedia:id/fragment_page_coordinator",
+            ARTICLE_TITLE_XPATH = "//android.view.View/android.view.View[1]/android.view.View[1]",
+            ADD_TO_LIST_OK_BUTTON_XPATH = "//*[@resource-id='android:id/button1'][@text='OK']";
 
     public ArticlePageObject(AndroidDriver driver) {
         super(driver);
     }
 
-    public void firstSaveArticleToList(String list_name){
+    public void firstSaveArticleToList(String list_name) {
         waitForElementAndClick(
                 By.id(SAVE_BUTTON_ID),
                 "Not find Save Button",
@@ -43,7 +43,8 @@ public class ArticlePageObject extends MainPageObject {
 
 
     }
-    public void saveArticleToList(String list_name){
+
+    public void saveArticleToList(String list_name) {
         waitForElementAndClick(
                 By.id(SAVE_BUTTON_ID),
                 "Not find Save Button",
@@ -66,11 +67,13 @@ public class ArticlePageObject extends MainPageObject {
         );
 
     }
-    private static String getListTitleXpath(String substring){
-        return LIST_TITLE_XPATH.replace("{SUBSTRING}",substring);
+
+    private static String getListTitleXpath(String substring) {
+        return LIST_TITLE_XPATH.replace("{SUBSTRING}", substring);
 
     }
-    public void assertArticleHasTitle(String article_title){
+
+    public void assertArticleHasTitle(String article_title) {
         String article_title_actual = waitForElementPresent(
                 By.xpath(ARTICLE_TITLE_XPATH),
                 "Not find title of article",
@@ -80,7 +83,8 @@ public class ArticlePageObject extends MainPageObject {
                 article_title,
                 article_title_actual,
                 "Wrong article title"
-        );    }
+        );
+    }
 
 
 }

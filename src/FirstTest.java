@@ -3,12 +3,8 @@ import lib.UI.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
-import java.util.List;
 
 public class FirstTest extends CoreTestCase {
-
 
 
     @Test
@@ -77,22 +73,18 @@ public class FirstTest extends CoreTestCase {
 
 
     }
+
     @Test
-    public void testFindingArticleTitle(){
+    public void testFindingArticleTitle() {
         OnBoardingPageObject OnBoardingPageObject = new OnBoardingPageObject(driver);
         OnBoardingPageObject.skipOnboarding();
         SearchPageObject SearchPageObject = new SearchPageObject(driver);
         String search_word = "Thor";
         SearchPageObject.searchText(search_word);
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Thor: Love and Thunder']"),
-                "Not find Love Ant Thunder article",
-                5
-        );
-        MainPageObject.assertElementPresent(
-                By.xpath("//android.view.View/android.view.View[1]/android.view.View[1][@text='Thor: Love and Thunder']"),
-                "Not Find Article title"
-        );
+        String article_title = "Thor: Love and Thunder";
+        SearchPageObject.openArticle(article_title);
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject.assertArticleHasTitle(article_title);
 
     }
 
@@ -101,7 +93,6 @@ public class FirstTest extends CoreTestCase {
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
-
 
 
 }

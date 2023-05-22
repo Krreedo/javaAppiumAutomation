@@ -13,9 +13,10 @@ import java.util.List;
 public class MainPageObject {
     public AndroidDriver driver;
 
-    public MainPageObject(AndroidDriver driver){
+    public MainPageObject(AndroidDriver driver) {
         this.driver = driver;
     }
+
     public WebElement assertElementHasText(By by, String expected_text, String error_message, long timeOut) {
         WebElement element = waitForElementPresent(by, error_message, timeOut);
         String actual_text = element.getText();
@@ -65,6 +66,7 @@ public class MainPageObject {
                 "speed", 3000
         ));
     }
+
     public WebElement assertElementPresent(By by, String error_message) {
 //        try {
 //            Thread.sleep(5000);
