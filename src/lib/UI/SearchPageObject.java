@@ -19,6 +19,7 @@ public class SearchPageObject extends MainPageObject {
             CLOSE_SEARCH_BUTTON_ID = "org.wikipedia:id/search_close_btn",
             SEARCH_EMPTY_CONTAINER_ID = "org.wikipedia:id/search_empty_container",
             PAGE_LIST_ID = "org.wikipedia:id/page_list_item_title",
+            ARTICLE_TITLE_AND_DESCRIPTION_XPATH = "//android.view.ViewGroup/android.widget.TextView[@text='{TITLE}']/../android.widget.TextView[@text='{DESCRIPTION}']/..",
             ARTICLE_TITLE_XPATH = "//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='{SUBSTRING}']";
 
     public void searchText(String value) {
@@ -78,6 +79,13 @@ public class SearchPageObject extends MainPageObject {
 
     }
 
+    private static String getSearchResultXpathByTitleAndDescription(String title, String description) {
+        return ARTICLE_TITLE_AND_DESCRIPTION_XPATH
+                .replace("{TITLE}", title)
+                .replace("{DESCRIPTION}", description);
+
+    }
+
     public void openArticle(String article_title) {
         waitForElementAndClick(
                 By.xpath(getSearchResultXpath(article_title)),
@@ -85,5 +93,32 @@ public class SearchPageObject extends MainPageObject {
                 5
         );
     }
+
+    public void openArticleWithDesc(String article_title, String article_desc) {
+        waitForElementAndClick(
+                By.xpath(getSearchResultXpathByTitleAndDescription(article_title, article_desc)),
+                "Not find " + article_title + " article",
+                5
+        );
+    }
+
+    public void waitForElementByTitleAndDescription(String title, String description) {
+        ;
+        waitForElementPresent(
+                By.xpath(getSearchResultXpathByTitleAndDescription(title, description)),
+                "Title '" + title + "' or description '" + description + "' doesn't match",
+                5
+        );
+
+
+    }
+
+    public void assertTitlesAndDescriptionsInSearchResult(List<String> titles, List<String> descriptions) {
+        for (int i = 0; i < titles.size(); i++) {
+            waitForElementByTitleAndDescription(titles.get(i), descriptions.get(i));
+        }
+
+    }
+
 
 }

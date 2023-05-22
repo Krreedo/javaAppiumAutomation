@@ -3,6 +3,10 @@ import lib.UI.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class FirstTest extends CoreTestCase {
 
@@ -88,6 +92,17 @@ public class FirstTest extends CoreTestCase {
 
     }
 
+    @Test
+    public void testSearchResultsCorrect() {
+        OnBoardingPageObject OnBoardingPageObject = new OnBoardingPageObject(driver);
+        OnBoardingPageObject.skipOnboarding();
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        String search_word = "Thor";
+        SearchPageObject.searchText(search_word);
+        List<String> expected_titles = Arrays.asList("Thor", "Thor: Love and Thunder", "Thor: The Dark World");
+        List<String> expected_descriptions = Arrays.asList("Hammer-wielding Germanic god associated with thunder", "2022 Marvel Studios film", "2013 Marvel Studios film");
+        SearchPageObject.assertTitlesAndDescriptionsInSearchResult(expected_titles, expected_descriptions);
+    }
 //        try {
 //            Thread.sleep(5000);
 //        } catch (InterruptedException e) {
