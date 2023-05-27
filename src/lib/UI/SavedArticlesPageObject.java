@@ -1,25 +1,24 @@
 package lib.UI;
 
-import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.AppiumDriver;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
 public class SavedArticlesPageObject extends MainPageObject {
-    public SavedArticlesPageObject(AndroidDriver driver) {
+    public SavedArticlesPageObject(AppiumDriver driver) {
         super(driver);
     }
 
     private static final String
-            SAVED_LIST_NAME_XPATH = "//*[@resource-id='org.wikipedia:id/item_title'][@text='{SUBSTRING}']",
-            ARTICLE_ELEMENT_ID = "org.wikipedia:id/page_list_item_title",
-            ARTICLE_NAME_XPATH = "//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='{SUBSTRING}']";
+            SAVED_LIST_NAME = "xpath://*[@resource-id='org.wikipedia:id/item_title'][@text='{SUBSTRING}']",
+            ARTICLE_ELEMENT = "id:org.wikipedia:id/page_list_item_title",
+            ARTICLE_NAME = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='{SUBSTRING}']";
 
     public void openSavedList(String list_name) {
         waitForElementAndClick(
-                By.xpath(getSavedListNameXpath(list_name)),
+                getSavedListNameXpath(list_name),
                 "Not find " + list_name + "List",
                 5
         );
@@ -27,7 +26,7 @@ public class SavedArticlesPageObject extends MainPageObject {
 
     public void swipeToDeleteArticle(String article_name) {
         swipe(
-                By.xpath(getArticleNameXpath(article_name)),
+                getArticleNameXpath(article_name),
                 "Not find " + article_name + " article",
                 5,
                 "left",
@@ -36,18 +35,18 @@ public class SavedArticlesPageObject extends MainPageObject {
     }
 
     private static String getSavedListNameXpath(String substring) {
-        return SAVED_LIST_NAME_XPATH.replace("{SUBSTRING}", substring);
+        return SAVED_LIST_NAME.replace("{SUBSTRING}", substring);
 
     }
 
     private static String getArticleNameXpath(String substring) {
-        return ARTICLE_NAME_XPATH.replace("{SUBSTRING}", substring);
+        return ARTICLE_NAME.replace("{SUBSTRING}", substring);
 
     }
 
     public List<WebElement> getSavedArticles() {
         List<WebElement> saved_articles_elements = waitForElementsPresent(
-                By.id(ARTICLE_ELEMENT_ID),
+                ARTICLE_ELEMENT,
                 "Not find any articles",
                 5);
         return saved_articles_elements;
@@ -62,7 +61,7 @@ public class SavedArticlesPageObject extends MainPageObject {
 
     public void openArticle(String article_title) {
         waitForElementAndClick(
-                By.xpath(getArticleNameXpath(article_title)),
+                getArticleNameXpath(article_title),
                 "Not find " + article_title + " article",
                 5
         );
