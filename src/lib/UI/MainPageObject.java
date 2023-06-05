@@ -4,11 +4,14 @@ import com.google.common.collect.ImmutableMap;
 import io.appium.java_client.AppiumDriver;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class MainPageObject {
@@ -70,6 +73,15 @@ public class MainPageObject {
         ));
     }
 
+    public void swipeIOS(String locator, String error_message, long timeOut, String direction) {
+        WebElement element = waitForElementPresent(locator, error_message, timeOut);
+        JavascriptExecutor js = driver;
+        Map<String, Object> params = new HashMap<>();
+        params.put("direction", direction);
+        params.put("element", ((RemoteWebElement) element).getId());
+        js.executeScript("mobile: swipe", params);
+    }
+
     public WebElement assertElementPresent(String locator, String error_message) {
 //        try {
 //            Thread.sleep(5000);
@@ -86,16 +98,17 @@ public class MainPageObject {
 
 
     }
-    private By getLocatorByString (String locator_with_type){
-        String[] exploded_locator = locator_with_type.split(Pattern.quote(":"),2);
+
+    private By getLocatorByString(String locator_with_type) {
+        String[] exploded_locator = locator_with_type.split(Pattern.quote(":"), 2);
         String by_type = exploded_locator[0];
         String locator = exploded_locator[1];
-        if (by_type.equals("id")){
+        if (by_type.equals("id")) {
             return By.id(locator);
-        } else if(by_type.equals("xpath")){
+        } else if (by_type.equals("xpath")) {
             return By.xpath(locator);
         } else {
-            throw new IllegalArgumentException("Wrong type of locator "+ by_type);
+            throw new IllegalArgumentException("Wrong type of locator " + by_type);
         }
 
     }

@@ -1,6 +1,8 @@
 package Tests;
 
 import lib.CoreTestCase;
+import lib.UI.Factories.OnBoardingPageObjectFactory;
+import lib.UI.Factories.SearchPageObjectFactory;
 import lib.UI.OnBoardingPageObject;
 import lib.UI.SearchPageObject;
 import org.junit.jupiter.api.Assertions;
@@ -24,13 +26,13 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testCancelSearch() {
-        OnBoardingPageObject OnBoardingPageObject = new OnBoardingPageObject(driver);
+        OnBoardingPageObject OnBoardingPageObject = OnBoardingPageObjectFactory.get(driver);
         OnBoardingPageObject.skipOnboarding();
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         String search_word = "Tears";
         SearchPageObject.searchText(search_word);
         SearchPageObject.searchResultsExist();
-        SearchPageObject.closeSearch();
+        SearchPageObject.clearSearch();
         SearchPageObject.searchResultsIsEmpty();
     }
 
@@ -38,18 +40,19 @@ public class SearchTests extends CoreTestCase {
     public void testAssertTitlesFromSearch() {
         OnBoardingPageObject OnBoardingPageObject = new OnBoardingPageObject(driver);
         OnBoardingPageObject.skipOnboarding();
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         String search_word = "Tears";
         SearchPageObject.searchText(search_word);
         int number_of_articles_on_screen = 6;
         Assertions.assertEquals(number_of_articles_on_screen, SearchPageObject.getSearchResultsList().size());
         SearchPageObject.assertArticleTitles(search_word);
     }
+
     @Test
     public void testSearchResultsCorrect() {
         OnBoardingPageObject OnBoardingPageObject = new OnBoardingPageObject(driver);
         OnBoardingPageObject.skipOnboarding();
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         String search_word = "Thor";
         SearchPageObject.searchText(search_word);
         List<String> expected_titles = Arrays.asList("Thor", "Thor: Love and Thunder", "Thor: The Dark World");

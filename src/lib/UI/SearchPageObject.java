@@ -6,21 +6,21 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class SearchPageObject extends MainPageObject {
+abstract public class SearchPageObject extends MainPageObject {
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
     }
 
-    private static final String
-            SEARCH_CONTAINER_IOS = "id:Search Wikipedia",
-            SEARCH_CONTAINER = "id:org.wikipedia:id/search_container",
-            SEARCH_INPUT_FIELD = "id:org.wikipedia:id/search_src_text",
-            CLOSE_SEARCH_BUTTON = "id:org.wikipedia:id/search_close_btn",
-            SEARCH_EMPTY_CONTAINER = "id:org.wikipedia:id/search_empty_container",
-            PAGE_LIST = "id:org.wikipedia:id/page_list_item_title",
-            ARTICLE_TITLE_AND_DESCRIPTION = "xpath://android.view.ViewGroup/android.widget.TextView[@text='{TITLE}']/../android.widget.TextView[@text='{DESCRIPTION}']/..",
-            ARTICLE_TITLE = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='{SUBSTRING}']";
+    public static String
+            SEARCH_CONTAINER,
+            SEARCH_INPUT_FIELD,
+            CLEAR_SEARCH_BUTTON,
+            CLOSE_SEARCH_BUTTON,
+            SEARCH_EMPTY_CONTAINER,
+            PAGE_LIST,
+            ARTICLE_TITLE_AND_DESCRIPTION,
+            ARTICLE_TITLE_TPL;
 
     public void searchText(String value) {
         waitForElementAndClick(
@@ -44,9 +44,9 @@ public class SearchPageObject extends MainPageObject {
 
     }
 
-    public void closeSearch() {
+    public void clearSearch() {
         waitForElementAndClick(
-                CLOSE_SEARCH_BUTTON,
+                CLEAR_SEARCH_BUTTON,
                 "Not find Close button",
                 5
         );
@@ -76,7 +76,7 @@ public class SearchPageObject extends MainPageObject {
     }
 
     private static String getSearchResultXpath(String substring) {
-        return ARTICLE_TITLE.replace("{SUBSTRING}", substring);
+        return ARTICLE_TITLE_TPL.replace("{SUBSTRING}", substring);
 
     }
 
@@ -120,8 +120,13 @@ public class SearchPageObject extends MainPageObject {
         }
 
     }
-    public void assertSearchContainerIsPresented(){
-        waitForElementPresent(SEARCH_CONTAINER_IOS,"Not find Search Field on Main Page", 15);
+
+    public void assertSearchContainerIsPresented() {
+        waitForElementPresent(SEARCH_CONTAINER, "Not find Search Field on Main Page", 15);
+    }
+
+    public void closeSearch() {
+        waitForElementAndClick(CLOSE_SEARCH_BUTTON, "Not Find Close Button", 5);
     }
 
 

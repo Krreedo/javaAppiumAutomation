@@ -8,14 +8,19 @@ import org.openqa.selenium.By;
 import java.util.regex.Pattern;
 
 public class ArticlePageObject extends MainPageObject {
-    private final static String
-            SAVE_BUTTON = "id:org.wikipedia:id/page_save",
-            ADD_TO_LIST_BUTTON = "id:org.wikipedia:id/snackbar_action",
-            ADD_TO_LIST_INPUT_FIELD = "id:org.wikipedia:id/text_input",
-            LIST_TITLE= "xpath://*[@resource-id='org.wikipedia:id/item_title'][@text='{SUBSTRING}']",
-            SNACKBAR_AFTER_SAVE = "id:org.wikipedia:id/fragment_page_coordinator",
-            ARTICLE_TITLE = "xpath://android.view.View/android.view.View[1]/android.view.View[1]",
-            ADD_TO_LIST_OK_BUTTON = "xpath://*[@resource-id='android:id/button1'][@text='OK']";
+    public static String
+            SAVE_BUTTON,
+            ADD_TO_LIST_BUTTON,
+            ADD_TO_LIST_INPUT_FIELD,
+            LIST_TITLE,
+            SNACKBAR_AFTER_SAVE,
+            ARTICLE_TITLE,
+            CREATE_LIST_BUTTON,
+            CREATE_NEW_LIST_BUTTON,
+            ADD_TO_LIST_BUTTON_FROM_SNACKBAR,
+            TABLE_OF_CONTENTS_BUTTON,
+            ARTICLE_TITLE_IN_CONTENTS,
+            ADD_TO_LIST_OK_BUTTON;
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -44,6 +49,58 @@ public class ArticlePageObject extends MainPageObject {
                 15
         );
 
+
+    }
+
+    public void saveFirstArticleToListIOS(String list_name, String article_title) {
+        waitForElementAndClick(
+                SAVE_BUTTON,
+                "Not find Save Button",
+                5
+        );
+        waitForElementAndClick(
+                getAddToListXpath(article_title),
+                "Not find Add to List Button",
+                5
+        );
+        waitForElementAndClick(
+                CREATE_NEW_LIST_BUTTON,
+                "Not find Create a new list Button",
+                5
+        );
+        waitForElementAndSendKeys(
+                ADD_TO_LIST_INPUT_FIELD,
+                "Not find Input field",
+                list_name,
+                5);
+        waitForElementAndClick(
+                CREATE_LIST_BUTTON,
+                "Not find Create Button",
+                5);
+    }
+
+    public void saveArticleToListIOS(String list_name, String article_title) {
+        waitForElementAndClick(
+                SAVE_BUTTON,
+                "Not find Save Button",
+                5
+        );
+        waitForElementAndClick(
+                getAddToListXpath(article_title),
+                "Not find Add to List Button",
+                5
+        );
+
+        waitForElementAndClick(
+                getListID(list_name),
+                "Not find list title " + list_name,
+                5
+        );
+        waitForElementsPresent(
+                SNACKBAR_AFTER_SAVE,
+                "Snackbar not presented after article save",
+                5
+        );
 
     }
 
@@ -76,6 +133,17 @@ public class ArticlePageObject extends MainPageObject {
 
     }
 
+    private static String getAddToListXpath(String substring) {
+        return ADD_TO_LIST_BUTTON_FROM_SNACKBAR.replace("{SUBSTRING}", substring);
+
+    }
+
+    private static String getArticleTitleID(String title) {
+        return ARTICLE_TITLE.replace("{TITLE}", title);
+
+    }
+
+
     public void assertArticleHasTitle(String article_title) {
         String article_title_actual = waitForElementPresent(
                 ARTICLE_TITLE,
@@ -89,6 +157,20 @@ public class ArticlePageObject extends MainPageObject {
         );
     }
 
+    public void assertArticleTitleInTableOfContents(String article_title) {
+        waitForElementAndClick(TABLE_OF_CONTENTS_BUTTON, "Not find Table of contents button", 5);
+        String article_title_actual = waitForElementPresent(ARTICLE_TITLE_IN_CONTENTS, "some error", 5).getText();
+        Assertions.assertEquals(
+                article_title,
+                article_title_actual,
+                "Wrong article title"
+        );
+
+    }
+
+    public static String getListID(String list_name) {
+        return "id:" + list_name;
+    }
 
 
 }

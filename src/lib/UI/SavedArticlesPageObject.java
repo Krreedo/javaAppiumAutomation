@@ -1,6 +1,8 @@
 package lib.UI;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
+import lib.Platform;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebElement;
 
@@ -11,10 +13,13 @@ public class SavedArticlesPageObject extends MainPageObject {
         super(driver);
     }
 
-    private static final String
-            SAVED_LIST_NAME = "xpath://*[@resource-id='org.wikipedia:id/item_title'][@text='{SUBSTRING}']",
-            ARTICLE_ELEMENT = "id:org.wikipedia:id/page_list_item_title",
-            ARTICLE_NAME = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='{SUBSTRING}']";
+    public static String
+            SAVED_LIST_NAME,
+            ARTICLE_ELEMENT,
+            READING_LISTS_IOS,
+            SYNC_POP_UP_CLOSE_BUTTON,
+            DELETE_BUTTON,
+            ARTICLE_NAME;
 
     public void openSavedList(String list_name) {
         waitForElementAndClick(
@@ -25,13 +30,25 @@ public class SavedArticlesPageObject extends MainPageObject {
     }
 
     public void swipeToDeleteArticle(String article_name) {
-        swipe(
-                getArticleNameXpath(article_name),
-                "Not find " + article_name + " article",
-                5,
-                "left",
-                0.75
-        );
+        if (Platform.getInstance().isAndroid()) {
+            swipe(
+                    getArticleNameXpath(article_name),
+                    "Not find " + article_name + " article",
+                    5,
+                    "left",
+                    0.75
+            );
+        }
+        if (Platform.getInstance().isIOS()) {
+            swipeIOS(
+                    getArticleNameXpath(article_name),
+                    "Not find " + article_name + " article",
+                    5,
+                    "left"
+            );
+            waitForElementAndClick(DELETE_BUTTON, "Not find Delete button", 10);
+        }
+
     }
 
     private static String getSavedListNameXpath(String substring) {
@@ -66,6 +83,19 @@ public class SavedArticlesPageObject extends MainPageObject {
                 5
         );
     }
+
+    public void chooseReadingLists() {
+        waitForElementAndClick(READING_LISTS_IOS, "Not Find Reading Lists button", 5);
+    }
+
+    public void closePopUp() {
+        waitForElementAndClick(SYNC_POP_UP_CLOSE_BUTTON, "Not find pop-up close button", 5);
+    }
+
+    public void swipeLeftElement() {
+
+    }
+
 //        driver.executeScript(
 //                "mobile: longClick",
 //                "{element: "+ waitForElementPresent(
