@@ -4,9 +4,6 @@ import io.appium.java_client.AppiumDriver;
 import lib.UI.MainPageObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.openqa.selenium.remote.DesiredCapabilities;
-
-import java.net.URL;
 
 public class CoreTestCase {
     protected AppiumDriver driver;

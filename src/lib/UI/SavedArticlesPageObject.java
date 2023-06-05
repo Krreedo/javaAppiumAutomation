@@ -1,7 +1,6 @@
 package lib.UI;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.TouchAction;
 import lib.Platform;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebElement;

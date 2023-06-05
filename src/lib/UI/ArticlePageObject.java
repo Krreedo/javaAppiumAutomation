@@ -1,11 +1,7 @@
 package lib.UI;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.android.AndroidDriver;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.By;
-
-import java.util.regex.Pattern;
 
 public class ArticlePageObject extends MainPageObject {
     public static String

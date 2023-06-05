@@ -3,9 +3,7 @@ package lib.UI.Factories;
 import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import lib.UI.Android.AndroidOnBoardingPageObject;
-import lib.UI.Android.AndroidSearchPageObject;
 import lib.UI.IOS.IOSOnBoardingPageObject;
-import lib.UI.IOS.IOSSearchPageObject;
 import lib.UI.OnBoardingPageObject;
 
 public class OnBoardingPageObjectFactory {
