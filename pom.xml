@@ -16,9 +16,15 @@
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.6.0</version>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.0</version>
+        </dependency>
+
         <dependency>
             <groupId>io.appium</groupId>
             <artifactId>java-client</artifactId>
@@ -29,17 +35,27 @@
             <artifactId>selenium-support</artifactId>
             <version>4.10.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>1.9.2</version>
+        </dependency>
     </dependencies>
     <build>
-        <testSourceDirectory>src/main/java/Tests</testSourceDirectory>
         <plugins>
-            <!-- Maven Surefire Plugin for running tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.0.0</version>
+                <configuration>
+                    <includes>
+                        <include>**/suites/**/*.java</include>
+                    </includes>
+                </configuration>
             </plugin>
         </plugins>
+
     </build>
+
 
 </project>

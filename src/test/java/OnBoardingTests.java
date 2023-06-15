@@ -1,7 +1,8 @@
-package Tests;
+package test.java;
 
 import lib.CoreTestCase;
 import lib.Platform;
+import lib.UI.Factories.OnBoardingPageObjectFactory;
 import lib.UI.Factories.SearchPageObjectFactory;
 import lib.UI.OnBoardingPageObject;
 import lib.UI.SearchPageObject;
@@ -13,7 +14,7 @@ public class OnBoardingTests extends CoreTestCase {
         if(Platform.getInstance().isAndroid()){
             return;
         }
-        OnBoardingPageObject OnBoardingPageObject = new OnBoardingPageObject(driver);
+        OnBoardingPageObject OnBoardingPageObject = OnBoardingPageObjectFactory.get(driver);
         OnBoardingPageObject.assertLearnMoreLink();
         OnBoardingPageObject.nextButtonClick();
         OnBoardingPageObject.assertTitleNewWays();

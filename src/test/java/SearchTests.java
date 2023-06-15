@@ -1,4 +1,4 @@
-package Tests;
+package test.java;
 
 import lib.CoreTestCase;
 import lib.UI.Factories.OnBoardingPageObjectFactory;

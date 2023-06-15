@@ -1,7 +1,8 @@
-package Tests;
+package test.java;
 
 import lib.CoreTestCase;
 import lib.UI.ArticlePageObject;
+import lib.UI.Factories.ArticlePageObjectFactory;
 import lib.UI.Factories.OnBoardingPageObjectFactory;
 import lib.UI.Factories.SearchPageObjectFactory;
 import lib.UI.OnBoardingPageObject;
@@ -18,7 +19,7 @@ public class ArticleTests extends CoreTestCase {
         SearchPageObject.searchText(search_word);
         String article_title = "Thor: Love and Thunder";
         SearchPageObject.openArticle(article_title);
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.assertArticleHasTitle(article_title);
 
     }
