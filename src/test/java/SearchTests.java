@@ -1,6 +1,7 @@
 package test.java;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.UI.Factories.OnBoardingPageObjectFactory;
 import lib.UI.Factories.SearchPageObjectFactory;
 import lib.UI.OnBoardingPageObject;
@@ -50,8 +51,10 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testSearchResultsCorrect() {
-        OnBoardingPageObject OnBoardingPageObject = OnBoardingPageObjectFactory.get(driver);
-        OnBoardingPageObject.skipOnboarding();
+        if (Platform.getInstance().isAndroid() || Platform.getInstance().isIOS()) {
+            OnBoardingPageObject OnBoardingPageObject = OnBoardingPageObjectFactory.get(driver);
+            OnBoardingPageObject.skipOnboarding();
+        }
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         String search_word = "Thor";
         SearchPageObject.searchText(search_word);

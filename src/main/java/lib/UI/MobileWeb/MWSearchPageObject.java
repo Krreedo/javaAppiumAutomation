@@ -13,9 +13,8 @@ public class MWSearchPageObject extends SearchPageObject {
         SEARCH_INPUT_FIELD = "css:form>input[type='search']";
         CLEAR_SEARCH_BUTTON = "css:button.clear";
         CLOSE_SEARCH_BUTTON = "css:button.close";
-//            SEARCH_EMPTY_CONTAINER = "";
         PAGE_LIST = "css:ul.page-list";
-        ARTICLE_TITLE_AND_DESCRIPTION = "xpath://li[contains(@title, '{TITLE}') and .//div[contains(text(), '{SUBSTRING}')]]";
+        ARTICLE_TITLE_AND_DESCRIPTION = "xpath://li[contains(@title, '{TITLE}') and .//div[contains(text(), '{DESCRIPTION}')]]";
         ARTICLE_TITLE_TPL = "xpath://li[contains(@title, '{SUBSTRING}')]";
     }
 }
