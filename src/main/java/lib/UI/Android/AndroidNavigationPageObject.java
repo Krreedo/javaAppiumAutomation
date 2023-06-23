@@ -1,10 +1,10 @@
 package lib.UI.Android;
 
-import io.appium.java_client.AppiumDriver;
 import lib.UI.NavigationPageObject;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class AndroidNavigationPageObject extends NavigationPageObject {
-    public AndroidNavigationPageObject(AppiumDriver driver) {
+    public AndroidNavigationPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 

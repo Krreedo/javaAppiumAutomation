@@ -1,9 +1,10 @@
 package lib.UI;
 
 import com.google.common.collect.ImmutableMap;
-import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,9 +16,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class MainPageObject {
-    public AppiumDriver driver;
+    public RemoteWebDriver driver;
 
-    public MainPageObject(AppiumDriver driver) {
+    public MainPageObject(RemoteWebDriver driver) {
         this.driver = driver;
     }
 
@@ -46,10 +47,20 @@ public class MainPageObject {
     }
 
     public WebElement waitForElementAndClick(String locator, String error_message, long timeOut) {
-        WebElement element = waitForElementPresent(locator, error_message, timeOut);
-        element.click();
-        return element;
+        if (Platform.getInstance().isMW()) {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+            WebElement element = waitForElementPresent(locator, error_message, timeOut);
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+            element.click();
+            return element;
+        } else {
+            WebElement element = waitForElementPresent(locator, error_message, timeOut);
+            element.click();
+            return element;
+        }
+
     }
+
 
     public WebElement waitForElementAndSendKeys(String locator, String error_message, String value, long timeOut) {
         WebElement element = waitForElementPresent(locator, error_message, timeOut);
@@ -107,9 +118,41 @@ public class MainPageObject {
             return By.id(locator);
         } else if (by_type.equals("xpath")) {
             return By.xpath(locator);
+        } else if (by_type.equals("css")) {
+            return By.cssSelector(locator);
         } else {
             throw new IllegalArgumentException("Wrong type of locator " + by_type);
         }
 
     }
+
+    public boolean isElementPresented(String locator, long timeOut) {
+        By by = getLocatorByString(locator);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+        try {
+            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(by));
+            return element.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void tryClickElementWithAttempts(String locator, String error, int amount_of_attempts) {
+        if (isElementPresented(locator, 5)) {
+            int current_attempts = 0;
+            boolean need_more_attempts = true;
+            while (need_more_attempts) {
+                try {
+                    waitForElementAndClick(locator, error, 1);
+                    need_more_attempts = false;
+                } catch (Exception e) {
+                    if (current_attempts > amount_of_attempts) {
+                        waitForElementAndClick(locator, error, 1);
+                    }
+                }
+                ++current_attempts;
+            }
+        }
+    }
+
 }

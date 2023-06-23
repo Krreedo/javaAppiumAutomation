@@ -1,10 +1,10 @@
 package lib.UI;
 
-import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class OnBoardingPageObject extends MainPageObject {
 
-    public OnBoardingPageObject(AppiumDriver driver) {
+    public OnBoardingPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 

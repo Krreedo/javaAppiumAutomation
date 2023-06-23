@@ -1,20 +1,30 @@
 package lib.UI;
 
-import io.appium.java_client.AppiumDriver;
+import lib.Platform;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class NavigationPageObject extends MainPageObject {
-    public NavigationPageObject(AppiumDriver driver) {
+    public NavigationPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
     public static String
-            SAVED_BUTTON;
+            SAVED_BUTTON,
+            BURGER_MENU;
 
     public void savedPage() {
-        waitForElementAndClick(
-                SAVED_BUTTON,
-                "Not find Saved Button in tab-bar",
-                5
-        );
+        if (Platform.getInstance().isAndroid() || Platform.getInstance().isIOS()) {
+            waitForElementAndClick(
+                    SAVED_BUTTON,
+                    "Not find Saved Button in tab-bar",
+                    5
+            );
+        } else {
+            waitForElementAndClick(BURGER_MENU, "Burger menu not presented on this page", 5);
+            tryClickElementWithAttempts(SAVED_BUTTON, "Cannot click Watchlist btn", 5);
+        }
+
     }
+
+
 }

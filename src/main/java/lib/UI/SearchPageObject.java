@@ -1,14 +1,14 @@
 package lib.UI;
 
-import io.appium.java_client.AppiumDriver;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.List;
 
 abstract public class SearchPageObject extends MainPageObject {
 
-    public SearchPageObject(AppiumDriver driver) {
+    public SearchPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -127,6 +127,10 @@ abstract public class SearchPageObject extends MainPageObject {
 
     public void closeSearch() {
         waitForElementAndClick(CLOSE_SEARCH_BUTTON, "Not Find Close Button", 5);
+    }
+
+    public void openSearch() {
+        waitForElementAndClick(SEARCH_CONTAINER, "Not find Search btn", 5);
     }
 
 

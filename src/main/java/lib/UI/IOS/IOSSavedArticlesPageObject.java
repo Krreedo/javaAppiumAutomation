@@ -1,10 +1,10 @@
 package lib.UI.IOS;
 
-import io.appium.java_client.AppiumDriver;
 import lib.UI.SavedArticlesPageObject;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class IOSSavedArticlesPageObject extends SavedArticlesPageObject {
-    public IOSSavedArticlesPageObject(AppiumDriver driver) {
+    public IOSSavedArticlesPageObject(RemoteWebDriver driver) {
         super(driver);
     }
     static {

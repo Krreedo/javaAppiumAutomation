@@ -1,14 +1,14 @@
 package lib.UI;
 
-import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.List;
 
 public class SavedArticlesPageObject extends MainPageObject {
-    public SavedArticlesPageObject(AppiumDriver driver) {
+    public SavedArticlesPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -47,6 +47,9 @@ public class SavedArticlesPageObject extends MainPageObject {
             );
             waitForElementAndClick(DELETE_BUTTON, "Not find Delete button", 10);
         }
+        if (Platform.getInstance().isMW()) {
+            waitForElementAndClick(getUnwatchButtonXpath(article_name), "Not find Delete button", 5);
+        }
 
     }
 
@@ -57,6 +60,11 @@ public class SavedArticlesPageObject extends MainPageObject {
 
     private static String getArticleNameXpath(String substring) {
         return ARTICLE_NAME.replace("{SUBSTRING}", substring);
+
+    }
+
+    private static String getUnwatchButtonXpath(String substring) {
+        return DELETE_BUTTON.replace("{SUBSTRING}", substring);
 
     }
 

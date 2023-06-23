@@ -1,12 +1,13 @@
 package lib.UI;
 
-import io.appium.java_client.AppiumDriver;
 import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class ArticlePageObject extends MainPageObject {
     public static String
             SAVE_BUTTON,
             ADD_TO_LIST_BUTTON,
+            ADD_TO_LIST_BUTTON_IS_PRESSED,
             ADD_TO_LIST_INPUT_FIELD,
             LIST_TITLE,
             SNACKBAR_AFTER_SAVE,
@@ -16,9 +17,11 @@ public class ArticlePageObject extends MainPageObject {
             ADD_TO_LIST_BUTTON_FROM_SNACKBAR,
             TABLE_OF_CONTENTS_BUTTON,
             ARTICLE_TITLE_IN_CONTENTS,
+            LOG_IN_BUTTON,
+            CLOSE_POP_UP_MW,
             ADD_TO_LIST_OK_BUTTON;
 
-    public ArticlePageObject(AppiumDriver driver) {
+    public ArticlePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -136,7 +139,6 @@ public class ArticlePageObject extends MainPageObject {
 
     private static String getArticleTitleID(String title) {
         return ARTICLE_TITLE.replace("{TITLE}", title);
-
     }
 
 
@@ -168,5 +170,30 @@ public class ArticlePageObject extends MainPageObject {
         return "id:" + list_name;
     }
 
+    public void firstSaveArticleMW() {
+        if (isElementPresented(CLOSE_POP_UP_MW, 2)) {
+            waitForElementAndClick(CLOSE_POP_UP_MW, "Cannot close pop-up", 5);
+        }
+        waitForElementAndClick(SAVE_BUTTON, "Cannot click Save btn", 5);
+        waitForElementAndClick(LOG_IN_BUTTON, "Cannot click Login btn", 5);
+    }
 
+    public void saveArticleMW(String article_title) {
+        if (isElementPresented(ADD_TO_LIST_BUTTON_IS_PRESSED, 2)) {
+            assertArticleHasTitle(article_title);
+            System.out.println("Article already added to watchlist");
+        } else {
+            if (isElementPresented(CLOSE_POP_UP_MW, 2)) {
+                waitForElementAndClick(CLOSE_POP_UP_MW, "Cannot close pop-up", 5);
+            }
+            assertArticleHasTitle(article_title);
+            waitForElementAndClick(SAVE_BUTTON, "Cannot click Save btn", 5);
+            assertArticleHasAddedToWatchList();
+        }
+    }
+
+
+    public void assertArticleHasAddedToWatchList() {
+        waitForElementPresent(ADD_TO_LIST_BUTTON_IS_PRESSED, "Article not added to list", 5);
+    }
 }

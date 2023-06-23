@@ -8,9 +8,13 @@ import org.junit.jupiter.api.Test;
 
 public class SavedArticlesTests extends CoreTestCase {
     @Test
-    public void testTwoArticlesSave() {
-        OnBoardingPageObject OnBoardingPageObject = OnBoardingPageObjectFactory.get(driver);
-        OnBoardingPageObject.skipOnboarding();
+    public void testTwoArticlesSave() throws Exception {
+        if (Platform.getInstance().isMW()) {
+            System.out.println("Start");
+        } else {
+            OnBoardingPageObject OnBoardingPageObject = OnBoardingPageObjectFactory.get(driver);
+            OnBoardingPageObject.skipOnboarding();
+        }
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         String search_word = "Thor";
         SearchPageObject.searchText(search_word);
@@ -27,30 +31,50 @@ public class SavedArticlesTests extends CoreTestCase {
             driver.navigate().back();
             driver.navigate().back();
             driver.navigate().back();
-        } else {
+        } else if (Platform.getInstance().isIOS()) {
             ArticlePageObject.saveFirstArticleToListIOS(list_name, article_title_1);
             driver.navigate().back();
             SearchPageObject.openArticle(article_title_2);
             ArticlePageObject.saveArticleToListIOS(list_name, article_title_2);
             driver.navigate().back();
             SearchPageObject.closeSearch();
+        } else {
+            String username = "Krreedo";
+            String password = "-6u3SsLnkD?cMS.";
+            ArticlePageObject.firstSaveArticleMW();
+            LoginPageObject LoginPageObject = LoginPageObjectFactory.get(driver);
+            LoginPageObject.enterCredentials(username, password);
+            LoginPageObject.submitLogin();
+            ArticlePageObject.assertArticleHasAddedToWatchList();
+            SearchPageObject.searchText(search_word);
+            SearchPageObject.openArticle(article_title_2);
+            ArticlePageObject.saveArticleMW(article_title_2);
         }
-
         NavigationPageObject NavigationPageObject = NavigationPageObjectFactory.get(driver);
         NavigationPageObject.savedPage();
         SavedArticlesPageObject SavedArticlesPageObject = SavedArticlePageObjectFactory.get(driver);
-        if (Platform.getInstance().isIOS()) {
-            SavedArticlesPageObject.closePopUp();
-            SavedArticlesPageObject.chooseReadingLists();
-        }
-        SavedArticlesPageObject.openSavedList(list_name);
-        SavedArticlesPageObject.swipeToDeleteArticle(article_title_1);
-        SavedArticlesPageObject.assertAfterDeleteArticle(article_title_1);
-        SavedArticlesPageObject.openArticle(article_title_2);
-        if (Platform.getInstance().isAndroid()) {
-            ArticlePageObject.assertArticleHasTitle(article_title_2);
+        if (Platform.getInstance().isIOS() || Platform.getInstance().isAndroid()) {
+            if (Platform.getInstance().isIOS()) {
+                SavedArticlesPageObject.closePopUp();
+                SavedArticlesPageObject.chooseReadingLists();
+            }
+            SavedArticlesPageObject.openSavedList(list_name);
+            SavedArticlesPageObject.swipeToDeleteArticle(article_title_1);
+            SavedArticlesPageObject.assertAfterDeleteArticle(article_title_1);
+            SavedArticlesPageObject.openArticle(article_title_2);
+            if (Platform.getInstance().isAndroid()) {
+                ArticlePageObject.assertArticleHasTitle(article_title_2);
+            } else {
+                ArticlePageObject.assertArticleTitleInTableOfContents(article_title_2);
+            }
         } else {
-            ArticlePageObject.assertArticleTitleInTableOfContents(article_title_2);
+            SavedArticlesPageObject.swipeToDeleteArticle(article_title_1);
+            driver.navigate().refresh();
+            driver.navigate().refresh();
+            SavedArticlesPageObject.assertAfterDeleteArticle(article_title_1);
+            SavedArticlesPageObject.openArticle(article_title_2);
+            ArticlePageObject.assertArticleHasTitle(article_title_2);
+
         }
 
 

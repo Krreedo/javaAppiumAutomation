@@ -1,10 +1,10 @@
 package lib.UI.Android;
 
-import io.appium.java_client.AppiumDriver;
 import lib.UI.ArticlePageObject;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class AndroidArticlePageObject extends ArticlePageObject {
-    public AndroidArticlePageObject(AppiumDriver driver) {
+    public AndroidArticlePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 

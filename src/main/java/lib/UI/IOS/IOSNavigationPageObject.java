@@ -1,10 +1,10 @@
 package lib.UI.IOS;
 
-import io.appium.java_client.AppiumDriver;
 import lib.UI.NavigationPageObject;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class IOSNavigationPageObject extends NavigationPageObject {
-    public IOSNavigationPageObject(AppiumDriver driver) {
+    public IOSNavigationPageObject(RemoteWebDriver driver) {
         super(driver);
     }
     static {
