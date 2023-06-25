@@ -1,5 +1,6 @@
 package lib.UI;
 
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebElement;
@@ -20,14 +21,17 @@ public class SavedArticlesPageObject extends MainPageObject {
             DELETE_BUTTON,
             ARTICLE_NAME;
 
+    @Step("Open saved list")
     public void openSavedList(String list_name) {
         waitForElementAndClick(
                 getSavedListNameXpath(list_name),
                 "Not find " + list_name + "List",
                 5
         );
+        takeScreenshot("saved_lists");
     }
 
+    @Step("Delete article from saved")
     public void swipeToDeleteArticle(String article_name) {
         if (Platform.getInstance().isAndroid()) {
             swipe(
@@ -50,6 +54,7 @@ public class SavedArticlesPageObject extends MainPageObject {
         if (Platform.getInstance().isMW()) {
             waitForElementAndClick(getUnwatchButtonXpath(article_name), "Not find Delete button", 5);
         }
+        takeScreenshot("state_after_delete");
 
     }
 
@@ -76,6 +81,7 @@ public class SavedArticlesPageObject extends MainPageObject {
         return saved_articles_elements;
     }
 
+    @Step("Assert that title deleted")
     public void assertAfterDeleteArticle(String article_title_expected) {
         for (WebElement saved_articles_element : getSavedArticles()) {
             String article_title = saved_articles_element.getText();
@@ -83,6 +89,7 @@ public class SavedArticlesPageObject extends MainPageObject {
         }
     }
 
+    @Step("Open article from saved list")
     public void openArticle(String article_title) {
         waitForElementAndClick(
                 getArticleNameXpath(article_title),
@@ -91,17 +98,21 @@ public class SavedArticlesPageObject extends MainPageObject {
         );
     }
 
+    @Step("Choose reading list")
     public void chooseReadingLists() {
         waitForElementAndClick(READING_LISTS_IOS, "Not Find Reading Lists button", 5);
+        takeScreenshot("state_after_reading_lists");
     }
 
+    @Step("Close pop-up")
     public void closePopUp() {
         waitForElementAndClick(SYNC_POP_UP_CLOSE_BUTTON, "Not find pop-up close button", 5);
+        takeScreenshot("state_after_closing_pop");
     }
 
-    public void swipeLeftElement() {
-
-    }
+//    public void swipeLeftElement() {
+//
+//    }
 
 //        driver.executeScript(
 //                "mobile: longClick",

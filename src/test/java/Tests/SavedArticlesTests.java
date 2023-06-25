@@ -1,13 +1,19 @@
-package test.java;
+package Tests;
 
+import io.qameta.allure.*;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.UI.*;
 import lib.UI.Factories.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class SavedArticlesTests extends CoreTestCase {
     @Test
+    @Severity(value = SeverityLevel.CRITICAL)
+    @Features(value = {@Feature(value = "Search"), @Feature(value = "Article"), @Feature(value = "SavedArticles")})
+    @DisplayName("Checking that we can delete 1 article from saved list")
+    @Description("We add 2 articles in watchlist/saved, and after delete one of article from there")
     public void testTwoArticlesSave() throws Exception {
         if (Platform.getInstance().isMW()) {
             System.out.println("Start");
